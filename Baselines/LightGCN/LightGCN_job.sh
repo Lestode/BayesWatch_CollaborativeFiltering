@@ -12,9 +12,9 @@
 python LightGCN.py \
   --data_dir /cluster/courses/cil/collaborative_filtering/data \
   --output_dir lightgcn_output \
-  --emb_dims   64,256 \
-  --num_layers 4,20 \
-  --lrs        1e-3,2e-2 \
-  --l1_reg     0,1e-3 \
+  --emb_dims   80 \
+  --num_layers 30 \
+  --lrs        2e-2 \
+  --l1_reg     0 \
   --epochs     1000 \
   --val_split  0.2

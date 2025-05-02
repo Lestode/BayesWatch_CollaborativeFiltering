@@ -1,7 +1,7 @@
 # LightGCN
 
 This model can be trained on the slurm cluster.
-For that :
+
 1. upload the files ```LightGCN_job.sh``` and ```LightGCN.py``` to the cluster.
 2. Create two directories on the cluster: ```logs``` and ```lightgcn_output```
 3. Enter the desired hyper-parameters in ```LightGCN_job.sh```

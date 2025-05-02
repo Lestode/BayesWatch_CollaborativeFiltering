@@ -1,7 +1,7 @@
 # LightGCN
 
 This model can be trained on the slurm cluster.
-For that :
+
 1. upload the svd_embedding directory adn its content to the cluster, or run the ```SVDpp_embeddings.ipynb``` notebook to generate new svd embeddings.
 2. upload the files ```run_wandb_sweep.sh``` and ```model.py``` to the cluster.
 3. Create two directories on the cluster: ```logs``` and ```model_output```.

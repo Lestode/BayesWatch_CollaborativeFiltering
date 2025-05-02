@@ -2,14 +2,13 @@ program: model.py
 method: bayes
 project: cil
 entity: soufianebarrada0-eth-z-rich
-run_cap: 20                    # stop after 50 total runs
+run_cap: 1
 
 metric:
   name: train_rmse
   goal: minimize
 
 parameters:
-  # fixed paths
   data_dir:
     value: /cluster/courses/cil/collaborative_filtering/data
   svd_path:
@@ -17,29 +16,20 @@ parameters:
   output_dir:
     value: novel_output
 
-  # Continuous hyperparameters (Bayes will optimize in log-space or uniform)
   lr:
-    distribution: log_uniform
-    min: -11.5129
-    max: -4.6052
+    values: [0.0016163737910166692]
   weight_decay:
-    distribution: log_uniform
-    min: -18.4207
-    max: -6.9078
+    values: [2.0583475490926855e-08]
   dropout:
-    distribution: uniform
-    min: 0.0
-    max: 0.5
+    values: [0.014265505942976877]
 
-  # Categorical / discrete choices
   num_layers:
-    values: [3, 4, 5, 6, 7, 8, 9, 10, 15, 20]
+    values: [9]
   batch_size:
-    values: [512, 1024, 2048]
+    values: [1024]
   fine_tune_embed:
-    values: [true]
+    value: true
 
-  # Fixed settings
   epochs:
     value: 20
   num_workers:

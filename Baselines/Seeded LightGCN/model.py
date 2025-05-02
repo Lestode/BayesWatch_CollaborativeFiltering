@@ -9,9 +9,7 @@ from torch_geometric.utils import to_undirected, degree
 import torch.nn as nn
 import torch.optim as optim
 
-# ---------------------------------------------
 # Utilities: Data Loading and Graph Preparation
-# ---------------------------------------------
 
 def load_csvs(data_dir):
     ratings = pd.read_csv(
@@ -102,9 +100,7 @@ def build_graph(pu, qi, user_map, item_map, ratings, wishlist):
     data.n_users, data.n_items = n_users, n_items
     return data
 
-# ---------------------------------------------
 # Dataset Class
-# ---------------------------------------------
 class RatingEdgeDataset(Dataset):
     def __init__(self, train_pos, ratings):
         self.u, self.v = train_pos
@@ -117,9 +113,7 @@ class RatingEdgeDataset(Dataset):
     def __getitem__(self, idx):
         return self.u[idx], self.v[idx], self.y[idx]
 
-# ---------------------------------------------
 # Model Definition: LightGCN
-# ---------------------------------------------
 class LightGCN(nn.Module):
     def __init__(self, n_layers, dropout, initial_embeds, fine_tune_embed=False):
         super().__init__()
@@ -156,9 +150,7 @@ class LightGCN(nn.Module):
             self.train()
         return h
 
-# ---------------------------------------------
 # Training and Inference
-# ---------------------------------------------
 def train_one_epoch(model, data, loader, optimizer, loss_fn, device, fine_tune_embed=False):
     model.train()
     total_loss = 0.0
@@ -182,7 +174,6 @@ def train_one_epoch(model, data, loader, optimizer, loss_fn, device, fine_tune_e
         optimizer.step()
         total_loss += loss.item() * u.size(0)
 
-    # fixed: return RMSE, not call a float
     return np.sqrt(total_loss / n_samples) if n_samples > 0 else 0.0
 
 def inference(model, data, sample_df, user_map, item_map, device, batch_size):
@@ -190,7 +181,7 @@ def inference(model, data, sample_df, user_map, item_map, device, batch_size):
     h = model.get_embeddings(data.adj.to(device))
     # map all sid_pid → indices
     sample_df = sample_df.copy()
-    sample_df['rating'] = 3.0  # default
+    sample_df['rating'] = 3.0
     valid = []
     for i, (sid, pid) in sample_df[['sid','pid']].iterrows():
         if sid in user_map and pid in item_map:
@@ -220,9 +211,7 @@ def generate_submission(model, data, sample_path, output_path, user_map, item_ma
     submission.to_csv(output_path, index=False)
     print(f"Submission saved to {output_path}")
 
-# ---------------------------------------------
 # Main Training Loop
-# ---------------------------------------------
 def main():
     wandb.init()
     cfg = wandb.config
@@ -270,7 +259,7 @@ def main():
         'finetune': int(cfg.fine_tune_embed),
         'bs': cfg.batch_size
     }
-    # build filename like: lightgcn_r<run_id>_L3_D0.5_lr1e-3_wd1e-5_ft0_bs256.pt
+    # build filename
     hp_str = (
         f"L{hp['layers']}_D{hp['dropout']}_lr{hp['lr']}_wd{hp['wd']}"
         f"_ft{hp['finetune']}_bs{hp['bs']}"
@@ -284,7 +273,7 @@ def main():
         'config': vars(cfg),
         'epoch': cfg.epochs
     }, ckpt_path)
-    print(f"🔖 Saved final checkpoint: {ckpt_path}")
+    print(f"Saved final checkpoint: {ckpt_path}")
 
     # Inference + submission
     generate_submission(

@@ -10,9 +10,7 @@ import torch.nn as nn
 import torch.optim as optim
 from sklearn.model_selection import train_test_split
 
-# ---------------------------------------------
 # Utilities: Data Loading and Graph Preparation
-# ---------------------------------------------
 
 def load_csvs(data_dir):
     ratings = pd.read_csv(
@@ -103,9 +101,7 @@ def build_graph(pu, qi, user_map, item_map, ratings, wishlist):
     data.n_users, data.n_items = n_users, n_items
     return data
 
-# ---------------------------------------------
 # Dataset Class
-# ---------------------------------------------
 class RatingEdgeDataset(Dataset):
     def __init__(self, train_pos, ratings):
         self.u, self.v = train_pos
@@ -118,9 +114,7 @@ class RatingEdgeDataset(Dataset):
     def __getitem__(self, idx):
         return self.u[idx], self.v[idx], self.y[idx]
 
-# ---------------------------------------------
-# Model Definition: LightGCN
-# ---------------------------------------------
+# Model Definition
 class LightGCN(nn.Module):
     def __init__(self, n_layers, dropout, initial_embeds, fine_tune_embed=False):
         super().__init__()
@@ -157,9 +151,7 @@ class LightGCN(nn.Module):
             self.train()
         return h
 
-# ---------------------------------------------
 # Training and Inference
-# ---------------------------------------------
 def train_one_epoch(model, data, loader, optimizer, loss_fn, device, fine_tune_embed=False):
     model.train()
     total_loss = 0.0
@@ -183,7 +175,6 @@ def train_one_epoch(model, data, loader, optimizer, loss_fn, device, fine_tune_e
         optimizer.step()
         total_loss += loss.item() * u.size(0)
 
-    # fixed: return RMSE, not call a float
     return np.sqrt(total_loss / n_samples) if n_samples > 0 else 0.0
 
 
@@ -243,26 +234,24 @@ def generate_submission(model, data, sample_path, output_path, user_map, item_ma
     submission.to_csv(output_path, index=False)
     print(f"Submission saved to {output_path}")
 
-# ---------------------------------------------
 # Main Training Loop
-# ---------------------------------------------
 def main():
     wandb.init()
     cfg = wandb.config
     device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-    # 1. load full ratings, then split
+    # load full ratings, then split
     ratings, wishlist, sample = load_csvs(cfg.data_dir)
     train_r, test_r = train_test_split(
         ratings, test_size=0.1, random_state=42
     )
 
-    # 2. build graph using ONLY train_r
+    # build graph using ONLY train_r
     pu, qi, user_map, item_map = load_svd_embeddings(cfg.svd_path)
     data = build_graph(pu, qi, user_map, item_map, train_r, wishlist)
     adj = data.adj.to(device)
 
-    # 3. Create train / test datasets & loaders
+    # Create train / test datasets & loaders
     train_dataset = RatingEdgeDataset(data.train_pos, data.y)
     train_loader  = DataLoader(train_dataset,
                                batch_size=cfg.batch_size,
@@ -284,7 +273,7 @@ def main():
                               num_workers=cfg.num_workers,
                               pin_memory=True)
 
-    # 4. Model + optimizer
+    # Model + optimizer
     model = LightGCN(cfg.num_layers, cfg.dropout,
                      data.x.to(device),
                      fine_tune_embed=cfg.fine_tune_embed).to(device)
@@ -292,7 +281,7 @@ def main():
                            lr=cfg.lr,
                            weight_decay=cfg.weight_decay)
 
-    # 5. Training loop with validation
+    # Training loop with validation
     for epoch in range(1, cfg.epochs+1):
         train_rmse = train_one_epoch(
             model, data, train_loader, optimizer,

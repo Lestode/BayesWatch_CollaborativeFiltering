@@ -1,0 +1,16 @@
+wandb_version: 1
+
+batch_size:
+  value: 238
+embedding_dim:
+  value: 16
+epochs:
+  value: 3
+hidden_dim1:
+  value: 129
+hidden_dim2:
+  value: 84
+lr:
+  value: 0.002016762952746776
+neg_ratio:
+  value: 5

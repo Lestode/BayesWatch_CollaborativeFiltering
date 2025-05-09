@@ -1,0 +1,41 @@
+project: cil_dmf
+entity: louis-barinka-eth-z-rich
+method: bayes
+metric:
+  goal: minimize
+  name: val/rmse
+parameters:
+  batch_size:
+    distribution: int_uniform
+    max: 756
+    min: 128
+  embedding_dim:
+    distribution: int_uniform
+    max: 132
+    min: 8
+  epochs:
+    distribution: int_uniform
+    max: 5
+    min: 1
+  hidden_dim1:
+    distribution: int_uniform
+    max: 388
+    min: 61
+  hidden_dim2:
+    distribution: int_uniform
+    max: 372
+    min: 46
+  lr:
+    distribution: uniform
+    max: 0.007330300656394928
+    min: 5e-05
+  neg_ratio:
+    distribution: int_uniform
+    max: 5
+    min: 1
+program: dmf.py
+
+command:
+  - ${env} # Pass environment variables (needed for W&B)
+  - ${interpreter} # Use the correct Python interpreter (python/python3)
+  - ${program} # Use the program defined above (dmf.py)

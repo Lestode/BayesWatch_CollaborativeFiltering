@@ -51,7 +51,7 @@ def build_hetero_graph(ratings: pd.DataFrame, wishlist: pd.DataFrame,
 
     return data
 
-# Model Definition (LightGCN-inspired)
+# Model Definition
 class LightHeteroCF(nn.Module):
     def __init__(self, num_users: int, num_papers: int,
                  emb_dim: int = 64, num_layers: int = 3):
@@ -148,7 +148,7 @@ def train_one(model: nn.Module, data: HeteroData,
         pred_r = 1.0 + 4.0 * torch.sigmoid(raw_r)
         loss_r = mse_loss(pred_r, true_r)
 
-        # BPR loss with vectorized neg sampling
+        # BPR loss with neg sampling
         rand = torch.rand(u_w.size(0), device=DEVICE)
         idx = (rand * neg_len[u_w]).long()
         neg_p = neg_mat[u_w, idx]
@@ -157,9 +157,10 @@ def train_one(model: nn.Module, data: HeteroData,
         loss_w = -torch.log(torch.sigmoid(pos_raw - neg_raw) + 1e-8).mean()
 
         # L1 regularization on embeddings
-        l1_penalty = l1_reg * (model.user_emb.weight.abs().sum() + model.paper_emb.weight.abs().sum())
+        #l1_penalty = l1_reg * (model.user_emb.weight.abs().sum() + model.paper_emb.weight.abs().sum())
 
-        (loss_r + loss_w + l1_penalty).backward()
+        #loss_r.backward()
+        (loss_r + loss_w).backward()
         optimizer.step()
 
     return model

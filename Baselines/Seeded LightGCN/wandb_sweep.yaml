@@ -31,6 +31,6 @@ parameters:
     value: true
 
   epochs:
-    value: 20
+    value: 18
   num_workers:
     value: 0

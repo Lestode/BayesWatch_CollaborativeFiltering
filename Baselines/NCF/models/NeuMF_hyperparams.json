@@ -1,0 +1,10 @@
+{
+    "model_dim": 64,
+    "lr": 0.0002,
+    "batch_size": 128,
+    "epochs": 80,
+    "pretrain_batch_size": 256,
+    "pretrain_lr_gmf": 0.00015,
+    "pretrain_lr_mlp": 1e-05,
+    "pretrain_epochs": 25
+}

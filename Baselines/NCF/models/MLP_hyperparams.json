@@ -1,0 +1,6 @@
+{
+    "model_dim": 16,
+    "lr": 4e-05,
+    "batch_size": 128,
+    "epochs": 25
+}

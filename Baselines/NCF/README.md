@@ -6,9 +6,21 @@ This directory contains the relevant code for the Neural Collaborative Filtering
 
 The trained models and used hyperparameters are contained in the `models` directory. All model files are also saved in the `saved_models` directory in the root of this repository. 
 
+## Requirements
+
+- Python 3.8 or newer
+- torch
+- numpy
+- scikit-learn
+- pandas
+
 ## Creating a submission
 
-To create a submission .csv file for Kaggle from a saved model, follow the `submission_example.py` file. Before running, fill out the model type, model dimension and the relevant directories at the top of the file. 
+To create a submission .csv file for Kaggle from a saved model, follow the `submission_example.py` file. Before running, 
+
+1. Ensure all dependencies are installed
+2. Fill out the model type, model dimension and the relevant directories at the top of the file
+3. The model predictions are saved as a .csv file ready for submission.
 
 ## Source Code
 

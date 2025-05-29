@@ -1,1 +1,3 @@
-![BayesWatch logo](assets/logo.png)
+<p align="center">
+  <img src="assets/logo.png" alt="BayesWatch logo" width="400"/>
+</p>

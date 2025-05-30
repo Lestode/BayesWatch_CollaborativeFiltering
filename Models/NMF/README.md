@@ -87,7 +87,7 @@ On the ETH cluster:
 
 ## Authors
 
-Developed by [Your Group Name/Number].
+Developed by BayesWatch.
 
 ## License
 
